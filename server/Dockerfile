@@ -1,8 +1,11 @@
 # Базовий образ
-FROM node:18-alpine
+FROM node:20-alpine
 
 # Робоча директорія
 WORKDIR /app
+
+# Встановлюємо залежності для native модулів
+RUN apk add --no-cache python3 make g++ sqlite-dev
 
 # Копіюємо package.json і tsconfig
 COPY package*.json tsconfig.json ./
