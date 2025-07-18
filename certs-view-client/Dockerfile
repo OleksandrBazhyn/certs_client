@@ -1,25 +1,29 @@
-# 🛠️ Стадія збірки
+# Стадія збірки
 FROM node:18-alpine AS builder
 
 # Встановлюємо робочу директорію
 WORKDIR /app
 
-# Копіюємо лише package.json та lock-файл
+# Копіюємо package.json та lock-файл
 COPY package*.json ./
 
 # Встановлюємо залежності
 RUN npm ci
 
-# Копіюємо решту файлів (після встановлення залежностей для кешу)
+# Копіюємо решту файлів
 COPY . .
 
-# Збираємо додаток
+# Приймаємо змінну оточення для React build
+ARG REACT_APP_API_URL
+ENV REACT_APP_API_URL=$REACT_APP_API_URL
+
+# Збираємо додаток з доступною змінною
 RUN npm run build
 
 # Стадія продакшну
 FROM nginx:alpine
 
-# Видаляємо стандартну конфігурацію nginx (опційно, залежить від твоєї nginx.conf)
+# Видаляємо стандартну конфігурацію nginx
 RUN rm -rf /etc/nginx/conf.d/default.conf
 
 # Копіюємо власну конфігурацію nginx
