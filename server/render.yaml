@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: certs-api
+    env: node
+    buildCommand: npm install && npm run build
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000
+      - key: JWT_SECRET
+        sync: false
+      - key: CERTS_API_KEY
+        sync: false
