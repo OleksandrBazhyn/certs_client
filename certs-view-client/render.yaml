@@ -2,8 +2,6 @@ services:
   - type: web
     name: certs-client
     env: docker
-    buildCommand: npm install && npm run build
-    staticPublishPath: ./build
     envVars:
       - key: REACT_APP_API_URL
         value: https://certs-api.onrender.com
