@@ -22,8 +22,8 @@ RUN chown -R nodejs:nodejs /app
 # Перемикаємося на непривілейованого користувача
 USER nodejs
 
-# Дозволи для логів
-RUN mkdir -p /app/logs && chown -R nodejs:nodejs /app/logs
+# Дозволи для логів та бази даних
+RUN mkdir -p /app/logs /app/data && chown -R nodejs:nodejs /app/logs /app/data
 
 # Користувач
 USER nodejs
