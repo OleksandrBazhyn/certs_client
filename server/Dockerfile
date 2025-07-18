@@ -1,30 +1,32 @@
-FROM node:20-slim
+# Базовий образ
+FROM node:18-alpine
 
-# Встановлюємо системні залежності для побудови native-модулів
-RUN apt-get update && apt-get install -y python3 make g++ && apt-get clean
-
-# Створюємо користувача
-RUN addgroup --gid 1001 nodejs && adduser --uid 1001 --ingroup nodejs --disabled-password nodejs
-
+# Робоча директорія
 WORKDIR /app
 
-COPY package*.json ./
-COPY tsconfig.json ./
+# Копіюємо package.json і tsconfig
+COPY package*.json tsconfig.json ./
 
-# Встановлюємо всі залежності (включно з dev)
+# Встановлюємо всі залежності (dev включно — бо потрібен tsc)
 RUN npm ci
 
-# Компілюємо TypeScript
+# Копіюємо решту коду
 COPY . .
+
+# Компілюємо TypeScript
 RUN npm run build
 
-# Видаляємо dev-залежності після білду
-RUN npm prune --omit=dev
+# Створюємо користувача
+RUN addgroup -g 1001 -S nodejs && adduser -S nodejs -u 1001 -G nodejs
 
-# Права доступу + лог-директорія
+# Дозволи для логів
 RUN mkdir -p /app/logs && chown -R nodejs:nodejs /app/logs
 
+# Користувач
 USER nodejs
+
+# Порт
 EXPOSE 3001
 
+# Запуск
 CMD ["node", "dist/index.js"]

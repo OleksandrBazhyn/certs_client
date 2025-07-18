@@ -1,15 +1,12 @@
 services:
   - type: web
-    name: certs-api
-    env: node
-    buildCommand: npm install && npm run build
-    startCommand: npm start
+    name: certs-server
+    env: docker
+    repo: https://github.com/OleksandrBazhyn/certs_client
+    dockerfilePath: server/Dockerfile
+    plan: free
     envVars:
       - key: NODE_ENV
         value: production
       - key: PORT
-        value: 10000
-      - key: JWT_SECRET
-        sync: false
-      - key: CERTS_API_KEY
-        sync: false
+        value: 3001
