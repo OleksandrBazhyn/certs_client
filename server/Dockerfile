@@ -7,20 +7,20 @@ WORKDIR /app
 # Встановлюємо залежності для native модулів
 RUN apk add --no-cache python3 make g++ sqlite-dev
 
-# Копіюємо package.json і tsconfig
-COPY package*.json tsconfig.json ./
-
-# Встановлюємо всі залежності (dev включно — бо потрібен tsc)
-RUN npm ci
-
-# Копіюємо решту коду
+# Копіюємо всі файли
 COPY . .
 
-# Компілюємо TypeScript
-RUN npm run build
+# Встановлюємо всі залежності та будуємо проект
+RUN npm ci && npm run build
 
 # Створюємо користувача
 RUN addgroup -g 1001 -S nodejs && adduser -S nodejs -u 1001 -G nodejs
+
+# Змінюємо власника файлів
+RUN chown -R nodejs:nodejs /app
+
+# Перемикаємося на непривілейованого користувача
+USER nodejs
 
 # Дозволи для логів
 RUN mkdir -p /app/logs && chown -R nodejs:nodejs /app/logs
