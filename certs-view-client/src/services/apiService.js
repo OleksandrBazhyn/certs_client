@@ -14,6 +14,7 @@ class ApiService {
    */
   async request(endpoint, options = {}) {
     const url = `${this.baseUrl}${endpoint}`;
+    console.log('Making request to:', url);
     
     const defaultOptions = {
       headers: {
@@ -21,7 +22,7 @@ class ApiService {
         ...options.headers
       }
     };
-
+    
     // Додаємо токен авторизації якщо він є
     const token = localStorage.getItem(config.STORAGE_KEYS.AUTH_TOKEN);
     if (token) {

@@ -14,6 +14,11 @@ app.use(express.json());
 
 app.use('/api', router);
 
+// Health check endpoint
+app.get('/health', (req, res) => {
+  res.json({ status: 'ok' });
+});
+
 // Ініціалізація демо користувачів
 userService.initializeDemoUsers().then(() => {
   logger.info('Demo users initialized');
