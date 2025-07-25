@@ -2,15 +2,13 @@ import React, { useEffect, useRef } from 'react';
 import config from '../config/config.js';
 import apiService from '../services/apiService.js';
 
-const GOOGLE_CLIENT_ID = config.GOOGLE_CLIENT_ID;
-
 const GoogleLoginButton = ({ onSuccess, onError }) => {
   const buttonRef = useRef(null);
 
   useEffect(() => {
     if (window.google && window.google.accounts && window.google.accounts.id && buttonRef.current) {
       window.google.accounts.id.initialize({
-        client_id: GOOGLE_CLIENT_ID,
+        client_id: config.GOOGLE_CLIENT_ID,
         callback: handleCredentialResponse,
         auto_select: false,
       });
